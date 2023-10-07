@@ -68,10 +68,48 @@ function App() {
   };
 
   const handleNextCard = () => {
-    const nextIndex = Math.floor(Math.random() * cardSet.length);
+    let nextIndex;
+    if (currentCardIndex === cardSet.length-1) {
+      nextIndex = 0;
+    }
+    else {
+      nextIndex = currentCardIndex+1;
+    }
+
     setCurrentCardIndex(nextIndex);
     setIsFront(true);
   };
+
+  const handlePrevCard = () => {
+    let prevIndex;
+    if (currentCardIndex === 0) {
+      prevIndex = cardSet.length-1;
+    }
+    else {
+      prevIndex = currentCardIndex-1;
+    }
+    
+    setCurrentCardIndex(prevIndex);
+    setIsFront(true);
+  };
+
+  const randomizeCard = () => {
+    let nextIndex = Math.floor(Math.random() * cardSet.length);;
+    setCurrentCardIndex(nextIndex);
+    setIsFront(true);
+  };
+
+  const checkGuess = () => {
+    let userGuess = document.getElementById('inputField');
+    let guessValue = userGuess.value.trim();
+
+    if (guessValue.toLowerCase() === answer.toLowerCase()) {
+        alert("Correct!");
+        handleNextCard();
+    } else {
+        alert("Incorrect");
+    }
+  }
 
   return (
     <div>
@@ -83,9 +121,19 @@ function App() {
             {isFront ? question : answer}
           </div>
         </div>
-      <button type="next" class="nextcard" onClick={handleNextCard}>
-        ⭢
-      </button>
+      <input type="text" id="inputField" placeholder="Place your answer here..."></input>
+      <button id="submitButton" onClick={checkGuess}>Submit</button>
+      <div>
+        <button type="prev" class="prevcard" onClick={handlePrevCard}>
+          ←
+        </button>
+        <button type="random" class="shuffle" onClick={randomizeCard}>
+          Shuffle
+        </button>
+        <button type="next" class="nextcard" onClick={handleNextCard}>
+          →
+        </button>
+      </div>
     </div>
   )
 }
